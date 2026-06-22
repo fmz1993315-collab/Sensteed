@@ -203,7 +203,10 @@
 
 .mode-button::after,
 .filter-chip::after,
-.sort-chip::after {
+.sort-chip::after,
+.map-expand-button::after,
+.scope-button::after,
+.show-more-card::after {
   border: 0;
 }
 
@@ -339,13 +342,135 @@
   flex: 1;
 }
 
-.map {
-  border: 1rpx solid rgba(185, 221, 235, 0.92);
-  border-radius: 36rpx;
-  height: 620rpx;
+.source-card {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1rpx solid rgba(255, 255, 255, 0.92);
+  border-radius: 34rpx;
+  box-shadow: 0 10rpx 28rpx rgba(15, 23, 42, 0.07);
+  margin-top: 26rpx;
+  padding: 24rpx 26rpx;
+}
+
+.source-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.source-head text:first-child {
+  color: #101828;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.source-head text:last-child {
+  color: #007aff;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.source-copy {
+  color: #5d6878;
+  font-size: 22rpx;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 14rpx;
+}
+
+.map-panel {
+  background:
+    linear-gradient(180deg, rgba(248, 251, 255, 0.98), rgba(235, 242, 250, 0.98)),
+    #f8fafc;
+  border: 1rpx solid rgba(255, 255, 255, 0.98);
+  border-radius: 40rpx;
+  box-shadow: 0 18rpx 42rpx rgba(15, 23, 42, 0.16);
   margin-top: 30rpx;
+  padding: 26rpx;
+}
+
+.map-panel.expanded {
+  border-radius: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  margin-top: 0;
+  padding: 36rpx;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 30;
+}
+
+.map-toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.map-title view {
+  color: #101828;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.map-title text {
+  color: #929cad;
+  display: block;
+  font-size: 21rpx;
+  font-weight: 700;
+  margin-top: 6rpx;
+}
+
+.map-expand-button {
+  background: rgba(0, 122, 255, 0.1);
+  border: 1rpx solid rgba(0, 122, 255, 0.22);
+  border-radius: 26rpx;
+  color: #007aff;
+  flex-shrink: 0;
+  font-size: 22rpx;
+  font-weight: 800;
+  height: 64rpx;
+  line-height: 62rpx;
+  margin: 0;
+  padding: 0 24rpx;
+}
+
+.map-tech-hud {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 20rpx 2rpx 18rpx;
+}
+
+.map-tech-hud text {
+  background: rgba(255, 255, 255, 0.64);
+  border: 1rpx solid rgba(214, 225, 236, 0.82);
+  border-radius: 999rpx;
+  color: #5a6a7c;
+  font-size: 18rpx;
+  font-weight: 800;
+  line-height: 1;
+  padding: 13rpx 18rpx;
+}
+
+.map {
+  border: 1rpx solid rgba(165, 202, 225, 0.72);
+  border-radius: 34rpx;
+  box-shadow:
+    inset 0 0 0 1rpx rgba(255, 255, 255, 0.8),
+    0 10rpx 26rpx rgba(15, 23, 42, 0.1);
+  height: 620rpx;
   overflow: hidden;
   width: 100%;
+}
+
+.map.expanded-map {
+  flex: 1;
+  height: auto;
+  min-height: 0;
 }
 
 .map-legend {
@@ -389,16 +514,57 @@
   margin: 36rpx 0 18rpx;
 }
 
-.list-heading view {
+.list-heading > view {
+  min-width: 0;
+}
+
+.list-title {
   color: #101828;
   font-size: 38rpx;
   font-weight: 800;
+  line-height: 1.15;
+}
+
+.list-hint {
+  color: #929cad;
+  font-size: 21rpx;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 8rpx;
 }
 
 .list-heading text {
   color: #007aff;
   font-size: 24rpx;
   font-weight: 800;
+}
+
+.scope-switch {
+  background: rgba(217, 223, 232, 0.76);
+  border: 1rpx solid rgba(201, 211, 223, 0.86);
+  border-radius: 22rpx;
+  display: grid;
+  gap: 6rpx;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 18rpx;
+  padding: 6rpx;
+}
+
+.scope-button {
+  background: transparent;
+  border-radius: 18rpx;
+  color: #5d6878;
+  font-size: 23rpx;
+  font-weight: 800;
+  height: 58rpx;
+  line-height: 58rpx;
+  padding: 0;
+}
+
+.scope-button.active {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 6rpx 20rpx rgba(15, 23, 42, 0.11);
+  color: #101828;
 }
 
 .gym-list {
@@ -546,4 +712,30 @@
   color: #929cad;
   font-size: 45rpx;
   line-height: 1;
+}
+
+.show-more-card {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1rpx solid #e0e6ee;
+  border-radius: 0 0 40rpx 40rpx;
+  border-top: 0;
+  color: #101828;
+  display: flex;
+  height: 100rpx;
+  justify-content: space-between;
+  line-height: 100rpx;
+  padding: 0 30rpx;
+  text-align: left;
+}
+
+.show-more-card text:first-child {
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.show-more-card text:last-child {
+  color: #007aff;
+  font-size: 23rpx;
+  font-weight: 800;
 }
