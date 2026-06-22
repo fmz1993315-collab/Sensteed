@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/gym-detail/gym-detail"
+  ],
+  "window": {
+    "navigationBarTitleText": "岩馆热力地图",
+    "navigationBarBackgroundColor": "#101418",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F6F3EF"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

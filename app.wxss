@@ -1,0 +1,15 @@
+page {
+  background: #e9edf3;
+  color: #101828;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-size: 28rpx;
+}
+
+button {
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

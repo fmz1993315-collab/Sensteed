@@ -1,0 +1,19 @@
+{
+  "description": "City climbing gym heat map mini program MVP",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.7.10",
+  "appid": "touristappid",
+  "projectname": "climbing-gym-heatmap",
+  "condition": {}
+}

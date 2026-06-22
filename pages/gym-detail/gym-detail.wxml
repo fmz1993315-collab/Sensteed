@@ -1,0 +1,83 @@
+<view class="page safe-bottom" wx:if="{{gym}}">
+  <view class="hero">
+    <view class="hero-map"></view>
+    <view class="hero-content">
+      <view class="status-row">
+        <view class="status {{gym.verifiedClass}}">{{gym.verifiedStatus}}</view>
+        <view class="confidence">可信度 {{gym.confidence}}%</view>
+      </view>
+      <view class="name">{{gym.name}}</view>
+      <view class="meta">{{gym.district}} · {{gym.type}} · {{gym.distanceKm}}km</view>
+      <view class="address">{{gym.address}}</view>
+      <view class="tag-row">
+        <block wx:for="{{gym.tags}}" wx:for-item="tag" wx:key="*this">
+          <view class="tag">{{tag}}</view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="search-command">
+    <view class="search-symbol"></view>
+    <view class="search-copy">
+      <view class="search-main">查找同行日期或备注</view>
+      <view class="search-sub">搜索此岩馆未来热度</view>
+    </view>
+    <button class="search-action" aria-label="筛选日期"><view></view></button>
+  </view>
+
+  <view class="quick-actions">
+    <button class="action {{todayMarked ? 'marked' : ''}}" data-date="{{todayKey}}" bindtap="toggleIntent">
+      <view class="action-title">{{todayMarked ? '今日已标记' : '今日去爬'}}</view>
+      <view class="action-count">{{todayHeat}} 人计划</view>
+    </button>
+    <button class="action {{tomorrowMarked ? 'marked' : ''}}" data-date="{{tomorrowKey}}" bindtap="toggleIntent">
+      <view class="action-title">{{tomorrowMarked ? '明日已标记' : '明日爬'}}</view>
+      <view class="action-count">{{tomorrowHeat}} 人计划</view>
+    </button>
+  </view>
+
+  <view class="section">
+    <view class="section-title">未来 14 天热度</view>
+    <view class="section-sub">只统计计划去爬人数，不公开个人身份</view>
+    <view class="calendar">
+      <block wx:for="{{calendar}}" wx:key="key">
+        <button class="date-cell {{item.marked ? 'marked' : ''}} {{item.level}}" data-date="{{item.key}}" bindtap="toggleIntent">
+          <view class="date-label">{{item.label}}</view>
+          <view class="date-day">{{item.day}}</view>
+          <view class="date-count">{{item.heat}}人</view>
+        </button>
+      </block>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">岩馆信息</view>
+    <view class="info-row">
+      <view class="info-label">营业时间</view>
+      <view class="info-value">{{gym.openingHours}}</view>
+    </view>
+    <view class="info-row">
+      <view class="info-label">最近核验</view>
+      <view class="info-value">{{gym.lastVerifiedAt}}</view>
+    </view>
+    <view class="facility-grid">
+      <view class="facility {{gym.hasBouldering ? 'yes' : ''}}">抱石</view>
+      <view class="facility {{gym.hasDifficulty ? 'yes' : ''}}">难度</view>
+      <view class="facility {{gym.hasLead ? 'yes' : ''}}">先锋</view>
+      <view class="facility {{gym.hasTopRope ? 'yes' : ''}}">顶绳</view>
+      <view class="facility {{gym.hasAutoBelay ? 'yes' : ''}}">自动保护</view>
+      <view class="facility {{gym.trainingArea ? 'yes' : ''}}">训练区</view>
+    </view>
+  </view>
+
+  <view class="bottom-actions">
+    <button class="secondary" bindtap="openLocation">导航</button>
+    <button class="secondary" bindtap="reportIssue">信息纠错</button>
+  </view>
+</view>
+
+<view class="empty" wx:else>
+  <view>没有找到这家岩馆</view>
+  <button bindtap="goBack">返回</button>
+</view>

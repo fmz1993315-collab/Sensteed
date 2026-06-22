@@ -1,0 +1,106 @@
+<view class="page safe-bottom">
+  <view class="topbar">
+    <view>
+      <view class="eyebrow">{{city}} · 今日热力</view>
+      <view class="title">岩馆热力</view>
+    </view>
+    <view class="city-chip">LIVE</view>
+  </view>
+
+  <view class="search-command">
+    <view class="search-symbol"></view>
+    <view class="search-copy">
+      <view class="search-main">找岩馆、区域或地铁站</view>
+      <view class="search-sub">热度 · 距离 · 抱石/难度</view>
+    </view>
+    <button class="search-action" aria-label="筛选"><view></view></button>
+  </view>
+
+  <view class="mode-switch">
+    <button class="mode-button {{mode === 'list' ? 'active' : ''}}" data-mode="list" bindtap="setMode">列表</button>
+    <button class="mode-button {{mode === 'map' ? 'active' : ''}}" data-mode="map" bindtap="setMode">地图</button>
+  </view>
+
+  <view class="overview-group">
+    <view class="group-title">今日概览</view>
+    <view class="summary-grid">
+      <view class="metric-card heat">
+        <view class="metric-label">今日计划</view>
+        <view><text class="metric-value">{{todayTotal}}</text><text class="metric-unit">人</text></view>
+      </view>
+      <view class="metric-card blue">
+        <view class="metric-label">热门岩馆</view>
+        <view><text class="metric-value">{{hotGymCount}}</text><text class="metric-unit">家</text></view>
+      </view>
+      <view class="metric-card green">
+        <view class="metric-label">低峰推荐</view>
+        <view><text class="metric-value">{{quietGymCount}}</text><text class="metric-unit">家</text></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="control-group">
+    <scroll-view class="filters" scroll-x enable-flex>
+      <button class="filter-chip {{activeFilter === 'all' ? 'active' : ''}}" data-filter="all" bindtap="setFilter">全部</button>
+      <button class="filter-chip {{activeFilter === 'bouldering' ? 'active' : ''}}" data-filter="bouldering" bindtap="setFilter">纯抱石</button>
+      <button class="filter-chip {{activeFilter === 'difficulty' ? 'active' : ''}}" data-filter="difficulty" bindtap="setFilter">有难度</button>
+      <button class="filter-chip {{activeFilter === 'lead' ? 'active' : ''}}" data-filter="lead" bindtap="setFilter">可先锋</button>
+      <button class="filter-chip {{activeFilter === 'beginner' ? 'active' : ''}}" data-filter="beginner" bindtap="setFilter">新手友好</button>
+    </scroll-view>
+
+    <view class="sort-row">
+      <view class="sort-label">排序</view>
+      <scroll-view class="sort-options" scroll-x enable-flex>
+        <button class="sort-chip {{sortBy === 'distance' ? 'active' : ''}}" data-sort="distance" bindtap="setSort">离我最近</button>
+        <button class="sort-chip {{sortBy === 'hotToday' ? 'active' : ''}}" data-sort="hotToday" bindtap="setSort">今日最热</button>
+        <button class="sort-chip {{sortBy === 'hotTomorrow' ? 'active' : ''}}" data-sort="hotTomorrow" bindtap="setSort">明日最热</button>
+        <button class="sort-chip {{sortBy === 'quietToday' ? 'active' : ''}}" data-sort="quietToday" bindtap="setSort">今日较空</button>
+      </scroll-view>
+    </view>
+  </view>
+
+  <block wx:if="{{mode === 'map'}}">
+    <map
+      class="map"
+      latitude="{{mapCenter.lat}}"
+      longitude="{{mapCenter.lng}}"
+      scale="11"
+      markers="{{markers}}"
+      bindmarkertap="openMarker"
+      show-location
+    ></map>
+    <view class="map-legend">
+      <view class="legend-item"><view class="legend-dot calm"></view>0-5</view>
+      <view class="legend-item"><view class="legend-dot warm"></view>6-15</view>
+      <view class="legend-item"><view class="legend-dot hot"></view>16+</view>
+    </view>
+  </block>
+
+  <view class="list-heading">
+    <view>附近岩馆</view>
+    <text>{{visibleGyms.length}} 家</text>
+  </view>
+
+  <view class="gym-list">
+    <block wx:for="{{visibleGyms}}" wx:key="id">
+      <view class="gym-card" data-id="{{item.id}}" bindtap="openGym">
+        <view class="gym-dot {{item.todayHeatLevel}}"></view>
+        <view class="gym-main">
+          <view class="gym-name">{{item.name}}</view>
+          <view class="gym-meta">{{item.district}} · {{item.type}} · {{item.distanceKm}}km</view>
+          <view class="tag-row">
+            <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+              <view class="tag">{{tag}}</view>
+            </block>
+          </view>
+        </view>
+        <view class="heat-stack">
+          <view class="heat-number {{item.todayHeatLevel}}">{{item.todayHeat}}</view>
+          <view class="heat-label">今日</view>
+          <view class="heat-tomorrow">明日 {{item.tomorrowHeat}}</view>
+        </view>
+        <view class="chevron">›</view>
+      </view>
+    </block>
+  </view>
+</view>

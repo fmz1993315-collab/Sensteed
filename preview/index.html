@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>岩馆热力地图预览</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="homeView" class="screen active">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">上海 · 今日热力</p>
+            <h1>岩馆热力</h1>
+          </div>
+          <span class="city-chip">LIVE</span>
+        </header>
+
+        <div class="search-command" role="search" aria-label="搜索岩馆">
+          <span class="search-symbol" aria-hidden="true"></span>
+          <div class="search-copy">
+            <span class="search-main">找岩馆、区域或地铁站</span>
+            <span class="search-sub">热度 · 距离 · 抱石/难度</span>
+          </div>
+          <button class="search-action" type="button" aria-label="筛选">
+            <span></span>
+          </button>
+        </div>
+
+        <div class="segmented" role="tablist" aria-label="视图切换">
+          <button class="segment active" data-mode="list" type="button">列表</button>
+          <button class="segment" data-mode="map" type="button">地图</button>
+        </div>
+
+        <section class="overview-group" aria-label="今日概览">
+          <div class="group-title">今日概览</div>
+          <div class="summary-grid">
+            <article class="metric-card heat">
+              <span>今日计划</span>
+              <strong id="todayTotal">0</strong>
+              <em>人</em>
+            </article>
+            <article class="metric-card blue">
+              <span>热门岩馆</span>
+              <strong id="hotGymCount">0</strong>
+              <em>家</em>
+            </article>
+            <article class="metric-card green">
+              <span>低峰推荐</span>
+              <strong id="quietGymCount">0</strong>
+              <em>家</em>
+            </article>
+          </div>
+        </section>
+
+        <section class="control-group" aria-label="筛选排序">
+          <div class="scroll-row" id="filterRow" aria-label="筛选">
+            <button class="pill active" data-filter="all" type="button">全部</button>
+            <button class="pill" data-filter="bouldering" type="button">纯抱石</button>
+            <button class="pill" data-filter="difficulty" type="button">有难度</button>
+            <button class="pill" data-filter="lead" type="button">可先锋</button>
+            <button class="pill" data-filter="beginner" type="button">新手友好</button>
+          </div>
+
+          <div class="sort-row">
+            <span>排序</span>
+            <div class="scroll-row compact" id="sortRow" aria-label="排序">
+              <button class="pill active" data-sort="distance" type="button">离我最近</button>
+              <button class="pill" data-sort="hotToday" type="button">今日最热</button>
+              <button class="pill" data-sort="hotTomorrow" type="button">明日最热</button>
+              <button class="pill" data-sort="quietToday" type="button">今日较空</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="mapPanel" class="map-panel" hidden>
+          <div class="map-sheet-head">
+            <strong>当前地图区域</strong>
+            <span>移动地图后可重新搜索</span>
+          </div>
+          <div class="map-canvas" id="mapCanvas" aria-label="地图预览"></div>
+          <div class="legend">
+            <span><i class="dot calm"></i>0-5</span>
+            <span><i class="dot warm"></i>6-15</span>
+            <span><i class="dot hot"></i>16+</span>
+          </div>
+        </section>
+
+        <div class="list-heading">
+          <strong>附近岩馆</strong>
+          <span id="gymCount">0 家</span>
+        </div>
+        <section class="gym-list" id="gymList" aria-label="岩馆列表"></section>
+      </section>
+
+      <section id="detailView" class="screen">
+        <button class="back-button" id="backButton" type="button">‹</button>
+        <article id="detailContent"></article>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
