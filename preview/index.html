@@ -74,10 +74,25 @@
           </div>
         </section>
 
+        <section class="source-card" aria-label="数据来源说明">
+          <div>
+            <strong>数据来源</strong>
+            <span>当前为 MVP 样例库</span>
+          </div>
+          <p>正式库会交叉汇总地图 POI、人工核验、用户纠错和岩馆认领；小红书/大众点评/公众号只作为开关店线索，不自动抓取内容。</p>
+        </section>
+
         <section id="mapPanel" class="map-panel" hidden>
-          <div class="map-sheet-head">
-            <strong>当前地图区域</strong>
-            <span>移动地图后可重新搜索</span>
+          <div class="map-toolbar">
+            <div class="map-sheet-head">
+              <strong>上海岩馆雷达</strong>
+              <span>同城岩馆 · 今日热力</span>
+            </div>
+            <button id="mapExpandButton" class="map-expand-button" data-map-expand type="button">全屏地图</button>
+          </div>
+          <div class="map-tech-hud">
+            <span>SHANGHAI GRID</span>
+            <span id="mapGymCount">0 PINS</span>
           </div>
           <div class="map-canvas" id="mapCanvas" aria-label="地图预览"></div>
           <div class="legend">
@@ -88,8 +103,15 @@
         </section>
 
         <div class="list-heading">
-          <strong>附近岩馆</strong>
+          <div>
+            <strong id="listTitle">附近岩馆</strong>
+            <span id="listHint">优先展示离你最近的岩馆</span>
+          </div>
           <span id="gymCount">0 家</span>
+        </div>
+        <div class="scope-switch" aria-label="列表范围">
+          <button class="scope-button active" data-scope="nearby" type="button">附近优先</button>
+          <button class="scope-button" data-scope="all" type="button">同城全部</button>
         </div>
         <section class="gym-list" id="gymList" aria-label="岩馆列表"></section>
       </section>
