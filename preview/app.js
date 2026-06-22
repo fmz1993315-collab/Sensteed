@@ -155,19 +155,27 @@ const state = {
   mode: "list",
   filter: "all",
   sort: "distance",
+  listScope: "nearby",
+  mapExpanded: false,
   intents: JSON.parse(localStorage.getItem("preview_intents") || "{}")
 };
+
+const NEARBY_LIMIT = 3;
 
 const els = {
   home: document.querySelector("#homeView"),
   detail: document.querySelector("#detailView"),
   gymList: document.querySelector("#gymList"),
   gymCount: document.querySelector("#gymCount"),
+  listTitle: document.querySelector("#listTitle"),
+  listHint: document.querySelector("#listHint"),
   todayTotal: document.querySelector("#todayTotal"),
   hotGymCount: document.querySelector("#hotGymCount"),
   quietGymCount: document.querySelector("#quietGymCount"),
   mapPanel: document.querySelector("#mapPanel"),
   mapCanvas: document.querySelector("#mapCanvas"),
+  mapExpandButton: document.querySelector("#mapExpandButton"),
+  mapGymCount: document.querySelector("#mapGymCount"),
   detailContent: document.querySelector("#detailContent")
 };
 
@@ -243,13 +251,24 @@ function visibleGyms() {
 
 function renderHome() {
   const items = visibleGyms();
-  els.gymCount.textContent = `${items.length} 家`;
+  const listItems = state.listScope === "nearby" ? items.slice(0, NEARBY_LIMIT) : items;
+  const hiddenCount = Math.max(items.length - listItems.length, 0);
+
+  els.gymCount.textContent =
+    state.listScope === "nearby" && hiddenCount > 0 ? `${listItems.length}/${items.length} 家` : `${items.length} 家`;
+  els.listTitle.textContent = state.listScope === "nearby" ? "附近岩馆" : "同城全部岩馆";
+  els.listHint.textContent = state.listScope === "nearby" ? "优先展示离你最近的岩馆" : "当前城市已收录岩馆";
   els.todayTotal.textContent = items.reduce((sum, gym) => sum + gym.todayHeat, 0);
   els.hotGymCount.textContent = items.filter((gym) => gym.todayHeat >= 16).length;
   els.quietGymCount.textContent = items.filter((gym) => gym.todayHeat <= 5).length;
   els.mapPanel.hidden = state.mode !== "map";
+  els.mapPanel.classList.toggle("expanded", state.mode === "map" && state.mapExpanded);
+  document.body.classList.toggle("map-expanded", state.mode === "map" && state.mapExpanded);
+  els.mapExpandButton.textContent = state.mapExpanded ? "收起地图" : "全屏地图";
+  els.mapGymCount.textContent = `${items.length} PINS`;
+  updateScopeButtons();
   renderMap(items);
-  els.gymList.innerHTML = items.map(renderGymCard).join("");
+  els.gymList.innerHTML = listItems.map(renderGymCard).join("") + renderShowMore(hiddenCount);
 }
 
 function renderGymCard(gym) {
@@ -283,6 +302,23 @@ function renderMap(items) {
       `;
     })
     .join("");
+}
+
+function renderShowMore(hiddenCount) {
+  if (state.listScope !== "nearby" || hiddenCount <= 0) return "";
+
+  return `
+    <button class="show-more-card" data-scope="all" type="button">
+      <span>查看同城全部岩馆</span>
+      <strong>还有 ${hiddenCount} 家</strong>
+    </button>
+  `;
+}
+
+function updateScopeButtons() {
+  document.querySelectorAll("[data-scope]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.scope === state.listScope);
+  });
 }
 
 function renderDetail(gymId) {
@@ -398,9 +434,17 @@ function toggleIntent(gymId, key) {
 }
 
 document.addEventListener("click", (event) => {
+  const mapExpandButton = event.target.closest("[data-map-expand]");
+  if (mapExpandButton) {
+    state.mapExpanded = !state.mapExpanded;
+    renderHome();
+    return;
+  }
+
   const modeButton = event.target.closest("[data-mode]");
   if (modeButton) {
     state.mode = modeButton.dataset.mode;
+    if (state.mode !== "map") state.mapExpanded = false;
     document.querySelectorAll("[data-mode]").forEach((button) => button.classList.toggle("active", button === modeButton));
     renderHome();
     return;
@@ -418,6 +462,13 @@ document.addEventListener("click", (event) => {
   if (sortButton) {
     state.sort = sortButton.dataset.sort;
     document.querySelectorAll("[data-sort]").forEach((button) => button.classList.toggle("active", button === sortButton));
+    renderHome();
+    return;
+  }
+
+  const scopeButton = event.target.closest("[data-scope]");
+  if (scopeButton) {
+    state.listScope = scopeButton.dataset.scope;
     renderHome();
     return;
   }
