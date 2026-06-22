@@ -59,30 +59,59 @@
     </view>
   </view>
 
+  <view class="source-card">
+    <view class="source-head">
+      <text>数据来源</text>
+      <text>当前为 MVP 样例库</text>
+    </view>
+    <view class="source-copy">正式库会交叉汇总地图 POI、人工核验、用户纠错和岩馆认领；小红书/大众点评/公众号只作为开关店线索，不自动抓取内容。</view>
+  </view>
+
   <block wx:if="{{mode === 'map'}}">
-    <map
-      class="map"
-      latitude="{{mapCenter.lat}}"
-      longitude="{{mapCenter.lng}}"
-      scale="11"
-      markers="{{markers}}"
-      bindmarkertap="openMarker"
-      show-location
-    ></map>
-    <view class="map-legend">
-      <view class="legend-item"><view class="legend-dot calm"></view>0-5</view>
-      <view class="legend-item"><view class="legend-dot warm"></view>6-15</view>
-      <view class="legend-item"><view class="legend-dot hot"></view>16+</view>
+    <view class="map-panel {{mapExpanded ? 'expanded' : ''}}">
+      <view class="map-toolbar">
+        <view class="map-title">
+          <view>上海岩馆雷达</view>
+          <text>同城岩馆 · 今日热力</text>
+        </view>
+        <button class="map-expand-button" bindtap="toggleMapExpanded">{{mapExpanded ? '收起地图' : '全屏地图'}}</button>
+      </view>
+      <view class="map-tech-hud">
+        <text>SHANGHAI GRID</text>
+        <text>{{visibleGyms.length}} PINS</text>
+      </view>
+      <map
+        class="map {{mapExpanded ? 'expanded-map' : ''}}"
+        latitude="{{mapCenter.lat}}"
+        longitude="{{mapCenter.lng}}"
+        scale="11"
+        markers="{{markers}}"
+        bindmarkertap="openMarker"
+        show-location
+      ></map>
+      <view class="map-legend">
+        <view class="legend-item"><view class="legend-dot calm"></view>0-5</view>
+        <view class="legend-item"><view class="legend-dot warm"></view>6-15</view>
+        <view class="legend-item"><view class="legend-dot hot"></view>16+</view>
+      </view>
     </view>
   </block>
 
   <view class="list-heading">
-    <view>附近岩馆</view>
-    <text>{{visibleGyms.length}} 家</text>
+    <view>
+      <view class="list-title">{{listScope === 'nearby' ? '附近岩馆' : '同城全部岩馆'}}</view>
+      <view class="list-hint">{{listScope === 'nearby' ? '优先展示离你最近的岩馆' : '当前城市已收录岩馆'}}</view>
+    </view>
+    <text>{{listScope === 'nearby' && hiddenGymCount > 0 ? displayGyms.length + '/' + visibleGyms.length + ' 家' : visibleGyms.length + ' 家'}}</text>
+  </view>
+
+  <view class="scope-switch">
+    <button class="scope-button {{listScope === 'nearby' ? 'active' : ''}}" data-scope="nearby" bindtap="setScope">附近优先</button>
+    <button class="scope-button {{listScope === 'all' ? 'active' : ''}}" data-scope="all" bindtap="setScope">同城全部</button>
   </view>
 
   <view class="gym-list">
-    <block wx:for="{{visibleGyms}}" wx:key="id">
+    <block wx:for="{{displayGyms}}" wx:key="id">
       <view class="gym-card" data-id="{{item.id}}" bindtap="openGym">
         <view class="gym-dot {{item.todayHeatLevel}}"></view>
         <view class="gym-main">
@@ -102,5 +131,9 @@
         <view class="chevron">›</view>
       </view>
     </block>
+    <button wx:if="{{listScope === 'nearby' && hiddenGymCount > 0}}" class="show-more-card" data-scope="all" bindtap="setScope">
+      <text>查看同城全部岩馆</text>
+      <text>还有 {{hiddenGymCount}} 家</text>
+    </button>
   </view>
 </view>

@@ -26,11 +26,15 @@ Page({
     mode: "list",
     activeFilter: "all",
     sortBy: "distance",
+    listScope: "nearby",
+    mapExpanded: false,
     mapCenter: {
       lat: 31.2304,
       lng: 121.4737
     },
     visibleGyms: [],
+    displayGyms: [],
+    hiddenGymCount: 0,
     markers: [],
     todayTotal: 0,
     hotGymCount: 0,
@@ -47,7 +51,14 @@ Page({
 
   setMode: function (event) {
     this.setData({
-      mode: event.currentTarget.dataset.mode
+      mode: event.currentTarget.dataset.mode,
+      mapExpanded: false
+    });
+  },
+
+  toggleMapExpanded: function () {
+    this.setData({
+      mapExpanded: !this.data.mapExpanded
     });
   },
 
@@ -70,6 +81,19 @@ Page({
     this.setData(
       {
         sortBy: event.currentTarget.dataset.sort
+      },
+      function () {
+        self.refreshGyms();
+      }
+    );
+  },
+
+  setScope: function (event) {
+    var self = this;
+
+    this.setData(
+      {
+        listScope: event.currentTarget.dataset.scope
       },
       function () {
         self.refreshGyms();
@@ -116,6 +140,9 @@ Page({
 
     var filtered = this.filterGyms(prepared);
     var sorted = this.sortGyms(filtered);
+    var nearbyLimit = 3;
+    var displayGyms = this.data.listScope === "nearby" ? sorted.slice(0, nearbyLimit) : sorted;
+    var hiddenGymCount = Math.max(sorted.length - displayGyms.length, 0);
     var todayTotal = sorted.reduce(function (sum, gym) {
       return sum + gym.todayHeat;
     }, 0);
@@ -159,6 +186,8 @@ Page({
 
     this.setData({
       visibleGyms: sorted,
+      displayGyms: displayGyms,
+      hiddenGymCount: hiddenGymCount,
       markers: markers,
       todayTotal: todayTotal,
       hotGymCount: hotGymCount,
